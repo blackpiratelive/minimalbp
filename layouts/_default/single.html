@@ -1,0 +1,21 @@
+{{- partial "head.html" . -}}
+{{- partial "header.html" . -}}
+<div class="all-content">
+
+    <h1 class="post-title">{{ .Title }}</h1>
+    <p class="author">Posted on {{ .Date.Format "January 02, 2006" }}</p>
+    
+    {{ .Content }}
+    {{ if isset .Params "tags" }}
+    <p class="author">
+        This status is tagged with:
+        {{ range (.GetTerms "tags") }}
+            <span><a href="{{ .Permalink }}">{{ .LinkTitle }}</a>,</span>
+        {{ end }}
+    </p>
+{{ end }}
+    
+</div>
+{{- partial "footer.html" . -}}
+</body>
+</html>

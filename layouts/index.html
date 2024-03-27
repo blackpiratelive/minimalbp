@@ -1,0 +1,94 @@
+{{- partial "head.html" . -}}
+<body>
+    {{- partial "header.html" . -}}
+    <div class="all-content">
+        <h4 class="description" id="go-to-top">{{ .Site.Params.description }}</h4>
+        <p class="author">There are currently a total of {{ len .Site.RegularPages }} status updates on this site.</p>
+        <h5 class="learn-how"><a href="https://blog.blackpiratex.com/making-twitter-using-hugo-and-netlify/">How this website is made</a></h5>
+        <div class="posts">
+<p class="author"><a href="/index.xml" class="rss-icon">Subscribe via RSS</a></p>
+
+
+
+
+
+<br>
+<h4 class="description choose-theme-text" id="accent-clr">Choose one of the accent color</h4>
+        <div class="theme-buttons">
+            <button onclick="myfunctionPurple()" class="theme-btn btn-purple"></button>
+        <button onclick="myfunctionGreen()" class="theme-btn btn-green"></button>
+        <button onclick="myfunctionRed()" class="theme-btn btn-red"></button>
+        <button onclick="myfunctionWhite()" class="theme-btn btn-white"></button>
+        <button onclick="myfunctionCyan()" class="theme-btn btn-cyan"></button>
+        <button onclick="myfunctionYellow()" class="theme-btn btn-yellow"></button>
+    </div>
+            {{ range (.Paginator 20).Pages }}
+            {{ $lastmodDateFormatted := .Lastmod.Format "02 Jan 2006 at 15:04" }}
+            {{ $lastmodTimeFormatted := .Lastmod.Format "15:04" }}
+            {{ $date := .Params.date.Format "02.01.2006" }}
+            {{ $lastmod := .Lastmod.Format "02.01.2006" }}
+            <div class="status-all" id="{{ $date }}">
+            <p>
+                <div class="head-of-post">
+                <div class="time">
+                    <span class="relativetime" datetime="{{ dateFormat "2006-01-02T15:04:05" .Date }}" title="{{ dateFormat "January 2, 2006" .Date }}"><span class="date-only">{{ .Date.Format "02 Jan 2006" }}</span> | <span class="timeam">{{ .Params.date.Format "15:04" }}</span></span>
+                </div>
+                <div class="arrow-to-post">
+                    <a href="{{ .RelPermalink }}" class="go-to-post" >
+                        <i class="fa-solid fa-angles-right"></i>
+                </a>
+            </div>
+            </div>
+                {{ .Content }}
+                {{ if isset .Params "tags" }}
+                <p><span class="mood"></span>
+                {{ range (.GetTerms "tags") }}
+                    <span>
+                        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></span></p>
+                {{ end }}
+                {{ end }}
+                {{ if ne $lastmod $date }}
+                <div class="last-updated-div">
+                <p id="last-updated2"><i class="fa-regular fa-pen-to-square"></i> <span datetime="{{ dateFormat "2006-01-02T15:04:05" .Date }}">{{ $lastmodDateFormatted }}</span></p>
+            </div>
+            {{ else }}
+            <div class="last-updated-div">
+                <p id="last-updated2"><i class="fa-regular fa-pen-to-square"></i> <span datetime="{{ dateFormat "2006-01-02T15:04:05" .Date }}">{{ $lastmodTimeFormatted }}</span></p>
+            </div>
+            {{ end }}
+            </p>
+        </div>
+        <br>
+        {{ end -}}
+    </div>
+    <div class="new-old-buttons">
+    {{ if .Paginator.HasPrev }}
+    <a class="btn btn-default newer-statuses" href="{{ .Paginator.Prev.URL }}">
+        Newer Statuses
+    </a>
+{{ end }}
+<a href="#go-to-top" class="go-to-top">Go to top</a>
+{{ if .Paginator.HasNext }}
+    <a class="btn btn-default older-statuses" href="{{ .Paginator.Next.URL }}">Older Statuses</a>
+{{ end }}
+</div>
+<br>
+
+
+<div class="tags-container-w-heading">
+    <h4 class="description sort-by-tags">Sort By Tags</h4>
+    <div class="tags-container">
+        {{range $name, $taxonomy := .Site.Taxonomies.tags}} {{ $cnt := .Count  }}
+    {{ with $.Site.GetPage (printf "/tags/%s" $name)  }}
+        <div class="tagbutton">
+        <a href={{ .RelPermalink  }} title="All pages with tag <i>{{$name}}</i>">{{$name}}</a>
+        <sup>({{$cnt}})</sup>
+       </div>
+    {{end}}
+    {{end}}
+    </div>
+    </div>
+    <br>
+    {{- partial "footer.html" . -}}
+</div>
+<body></html>
